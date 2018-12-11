@@ -6,6 +6,7 @@ export const GET_DATA_SUCCESS = 'GET_DATA_SUCCESS';
 export const SELECTED = 'SELECTED';
 export const UNSELECT = 'UNSELECT';
 export const ADD_DATA = 'ADD_DATA';
+export const REMOVE_ALL = 'REMOVE_ALL';
 
 const initialState = {
     loadingPoints: true,
@@ -28,11 +29,16 @@ export default function reducer(state = initialState, action) {
             return {...state, selected: [ ...state.selected, action.payload]};
             break;
         case UNSELECT:
-            const arr = state.selected.filter(value => value.id != action.payload);
+            const arr = state.selected.filter(value => value.id != action.payload.id);
+            console.log(arr);
             return {...state, selected: arr};
             break;
         case ADD_DATA:
             return {...state, points: [...state.points, action.payload]};
+            break;
+        case REMOVE_ALL:
+            console.log(action.payload);
+            return {...state, ...action.payload};
             break;
         default:
             return  {...state}
@@ -50,6 +56,16 @@ export function loadPointsFail(payload) {
     return {
         type: GET_DATA_FAIL,
         payload
+    }
+}
+
+export function removeAllBind() {
+    return {
+        type: REMOVE_ALL,
+        payload: {
+            selected: [],
+            points: []
+        }
     }
 }
 
@@ -75,7 +91,7 @@ export function unselected(payload) {
 }
 
 export function addPoint(payload) {
-    console.log('paylaod: ', payload);
+    // console.log('paylaod: ', payload);
     return {
         type: ADD_DATA,
         payload
@@ -96,9 +112,19 @@ export function loadAsyncPoints() {
     };
 }
 
+export function removeAll() {
+    return async dispatch => {
+        let keys = await AsyncStorage.getAllKeys();
+        await AsyncStorage.multiRemove(keys);
+        dispatch(removeAllBind());
+    }
+
+}
+
 export function addData(object, id) {
-    return dispatch => {
-        console.log('test 2 ', {...object, id})
+    return async dispatch => {
+        await AsyncStorage.setItem(id.toString(), JSON.stringify({...object, id}));
+        // console.log('test 2 ', {...object, id})
         dispatch(addPoint({...object, id}))
     }
 }

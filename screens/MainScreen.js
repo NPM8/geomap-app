@@ -4,7 +4,8 @@ import MyButtonHandler from "../components/MyButtonHandler";
 import {connect} from 'react-redux';
 import { Location, Permissions } from 'expo';
 import Colors from "../constants/Colors";
-import {addData, loadAsyncPoints, select, unselect} from "../reducer";
+import {addData, loadAsyncPoints, removeAll, select, unselect} from "../reducer";
+import PointComponent from "../components/PointComponent";
 
 class MainScreen extends PureComponent {
     static navigationOptions ={
@@ -18,6 +19,7 @@ class MainScreen extends PureComponent {
 
     constructor(props) {
         super(props);
+        this.swapSelected = this.swapSelected.bind(this);
     }
 
 
@@ -41,10 +43,24 @@ class MainScreen extends PureComponent {
 
     dellAll = () => {
         console.log('test');
+        this.props.removeAll()
     }
 
     goMap = () => {
         this.props.navigation.navigate('map')
+    }
+
+    swapSelected(object) {
+        console.log(object.selected);
+
+        if (object.selected) {
+            delete object.selected;
+            this.props.unselect(object);
+        }
+        else {
+            delete object.selected;
+            this.props.select(object)
+        }
     }
 
     render() {
@@ -62,11 +78,7 @@ class MainScreen extends PureComponent {
                 <FlatList
                     data={elems}
                     ListEmptyComponent={<Text style={{textAlign: 'center'}}> Brak elementów </Text>}
-                    renderItem={(item) => (<View key={item.item.key}>
-                        <Text>timestemp {item.item.timestamp}</Text>
-                        <Text>latitude {item.item.coords.latitude}</Text>
-                        <Text>longlitude {item.item.coords.longitude}</Text>
-                    </View>)}
+                    renderItem={(item) => (<PointComponent key={item.item.key} pointObject={item.item} swapSelect={this.swapSelected}/>)}
                 />
                 </View>
             </View>
@@ -102,9 +114,11 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state)  => {
     const elems = state.points.map((value, index) => {
-       const selected =  state.selected.includes(value);
+       const selected = (state.selected.filter(valu2e => valu2e.id == value.id).length >= 1);
+       // console.log(state.selected);
        return {...value, selected, key: value.id}
     });
+    console.log(state.selected)
     return {
         elems
     }
@@ -114,7 +128,8 @@ const mapDispatchToProps = {
     loadAsyncPoints,
     select,
     unselect,
-    addData
+    addData,
+    removeAll
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainScreen);

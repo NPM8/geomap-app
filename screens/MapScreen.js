@@ -23,7 +23,7 @@ class MapScreen extends Component {
                     longitudeDelta: 0.001,
                 }}
             >
-                {this.props.points.map(value => <MapView.Marker key={value.id} coordinate={{latitude: value.coords.latitude, longitude: value.coords.longitude}} title={`pos ${value.id}`} description={`opis ${value.id}`}/>)}
+                {this.props.selected.map(value => <MapView.Marker key={value.id} coordinate={{latitude: value.coords.latitude, longitude: value.coords.longitude}} title={`pos ${value.id}`} description={`opis ${value.id}`}/>)}
             </MapView>
         );
     }
