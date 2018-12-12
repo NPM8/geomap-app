@@ -12,12 +12,12 @@ const initialState = {
     loadingPoints: true,
     points: [],
     selected: [],
-}
+};
 
 export default function reducer(state = initialState, action) {
     switch (action.type) {
         case GET_DATA:
-            return {...state, loadingPoints: true}
+            return {...state, loadingPoints: true};
             break;
         case GET_DATA_FAIL:
             return {...state, loadingPoints: true, loadingPointsError: action.payload};

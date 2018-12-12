@@ -15,7 +15,7 @@ class MainScreen extends PureComponent {
         headerTitleStyle: {
             color: '#fff'
         }
-    }
+    };
 
     constructor(props) {
         super(props);
@@ -33,22 +33,22 @@ class MainScreen extends PureComponent {
         if (status !== 'granted') {
             alert('odmawiam przydzielenia uprawnień do czytania lokalizacji')
         }
-    }
+    };
 
     getPos = async () => {
         console.log('test');
-        let pos = await Location.getCurrentPositionAsync({})
+        let pos = await Location.getCurrentPositionAsync({});
         this.props.addData(pos, this.props.elems ? this.props.elems.length : 1 );
-    }
+    };
 
     dellAll = () => {
         console.log('test');
         this.props.removeAll()
-    }
+    };
 
     goMap = () => {
         this.props.navigation.navigate('map')
-    }
+    };
 
     swapSelected(object) {
         console.log(object.selected);
@@ -118,11 +118,11 @@ const mapStateToProps = (state)  => {
        // console.log(state.selected);
        return {...value, selected, key: value.id}
     });
-    console.log(state.selected)
+    console.log(state.selected);
     return {
         elems
     }
-}
+};
 
 const mapDispatchToProps = {
     loadAsyncPoints,
@@ -130,6 +130,6 @@ const mapDispatchToProps = {
     unselect,
     addData,
     removeAll
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainScreen);

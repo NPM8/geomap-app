@@ -23,7 +23,7 @@ class PointComponent extends Component {
             let obj = {...this.props.pointObject};
             delete obj.key;
             this.props.swapSelect(obj)
-    }
+    };
 
     render() {
         if(this.props.pointObject != null) {
@@ -63,7 +63,7 @@ class PointComponent extends Component {
 boldOne: {
                 fontWeight: "bold"
 }
-        })
+        });
 
 PointComponent.propTypes = {
     pointObject: PropTypes.object.isRequired,
